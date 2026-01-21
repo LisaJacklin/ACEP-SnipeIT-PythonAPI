@@ -3,8 +3,8 @@ import requests
 from pathlib import Path
 
 #put rule -> updates an existing thing
-url= "http://10.8.0.197:8000/ap/v1/hardware/10"
-snipeit_api_token = Path('snipeitkey.cred').read_text().strip()
+url= "http://snipeit.camio.acep.uaf.edu/ap/v1/hardware/10"
+snipeit_api_token = Path('prod.cred').read_text().strip()
 
 #information for new asset:
 payload = {
