@@ -1,3 +1,4 @@
 /creds/*
 *.cred
 snipeitkey
+*.json
