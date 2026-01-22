@@ -2,7 +2,8 @@
 # Last updated: 2026-01-22
 #
 # Description: Script to gather API reference IDs for use in other Snipe-IT API interactions.
-## Usage: python pull-ids.py
+# Usage: python pull-ids.py
+#
 
 import requests
 import json
@@ -51,8 +52,9 @@ def main():
         "manufacturers": get_reference_list("manufacturers"),
         "categories": get_reference_list("categories"),
         "models": get_reference_list("models"),
-        "statuslabels": get_reference_list("statuslabels")
-
+        "statuslabels": get_reference_list("statuslabels"),
+        "fieldsets": get_reference_list("fieldsets"),
+        "fields": get_reference_list("fields")
     }
 
     #store output to json file
