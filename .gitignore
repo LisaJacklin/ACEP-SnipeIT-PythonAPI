@@ -2,3 +2,5 @@
 *.cred
 snipeitkey
 *.json
+/__pycache__/*
+*.pyc
