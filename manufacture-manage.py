@@ -1,5 +1,5 @@
 # Name: manufacture-manage.py
-# Last Updated: 2025-01-22
+# Last Updated: 2026-01-22
 #
 # Description: a single script to manage manufacturers in Snipe-IT via API.
 #   This includes addingmanufacturers.
