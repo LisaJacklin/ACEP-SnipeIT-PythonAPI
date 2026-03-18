@@ -32,6 +32,20 @@ def main():
 	assets = client.get_all("hardware")
 	print(f"Successfully retrieved {len(assets)} assets.\n")
 
+	# Run Metric 1: Asset Count by Status
+	print("--- Asset Counts by Status Label ---")
+	status_counts = asset.get_status_counts(assets)
+	for status, count in sorted(status_counts.items()):
+			print(f"{status}: {count}")
+
+	total_assets = sum(status_counts.values())
+	print(f"\nTotal Assets: {total_assets}")
+
+	print("\n--- 'Ready to Deploy' Assets by Location ---")
+			# Run Metric 2: Ready to Deploy by Location
+	location_counts = asset.get_ready_location(assets)
+	for location, count in sorted(location_counts.items()):
+					print(f"{location}: {count}")
 
 if __name__ == "__main__":
 			main()
