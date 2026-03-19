@@ -4,3 +4,4 @@ snipeitkey
 *.json
 /__pycache__/*
 *.pyc
+reports/*
