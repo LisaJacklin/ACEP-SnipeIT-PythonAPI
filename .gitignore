@@ -1,3 +1,7 @@
 /creds/*
 *.cred
 snipeitkey
+*.json
+/__pycache__/*
+*.pyc
+reports/*
