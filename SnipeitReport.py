@@ -11,7 +11,7 @@ from datetime import datetime
 
 #module scripts for api and assets
 from reporting import asset
-from reporting.api_client import SnipeITClient
+from SnipeIT_APIclient import SnipeITClient
 from reporting import formatter
 from reporting import visuals
 
@@ -61,11 +61,11 @@ def main():
 		"'Ready to Deploy' Assets by Location", location_counts, add_total=True)
 
   #dates and picharts for report
-	status_pie_chart = report_dir + f"/status_pie_chart_{date_str}.png"
-	visuals.create_pie_chart(status_counts, "Asset Counts by Status", status_pie_chart)
+	# status_pie_chart = report_dir + f"/status_pie_chart_{date_str}.png"
+	# visuals.create_pie_chart(status_counts, "Asset Counts by Status", status_pie_chart)
 
-	location_pie_chart = report_dir + f"/location_pie_chart_{date_str}.png"
-	visuals.create_pie_chart(location_counts, "'Ready to Deploy' Assets by Location", location_pie_chart)
+	# location_pie_chart = report_dir + f"/location_pie_chart_{date_str}.png"
+	# visuals.create_pie_chart(location_counts, "'Ready to Deploy' Assets by Location", location_pie_chart)
 	#include the visuals!
 	#image_links = f"""
 	#	![Asset Counts by Status]({status_pie_chart})
