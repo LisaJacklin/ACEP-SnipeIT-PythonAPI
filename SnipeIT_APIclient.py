@@ -1,5 +1,6 @@
-#File: api_client.py
-# 2026-03-17
+#File: SnipeIT_APIclient.py
+#Created: 2026-03-17
+#Last edit: 2026-04-07
 #
 # Description:
 #
@@ -11,9 +12,11 @@ class SnipeITClient:
 		self.base_url = base_url.rstrip('/')
 		self.headers = {
 			"Accept": "application/json",
+			"Content-Type": "application/json", #added for POST ability
 			"Authorization": f"Bearer {api_key}"
 		}
 
+	# Used by: SnipeitReport.py
 	# pull all the data from the category (assets, license, hardware, etc)
 	def get_all(self, endpoint):
 		url = f"{self.base_url}/{endpoint}"
@@ -38,4 +41,17 @@ class SnipeITClient:
 
 			offset+= limit
 		return all_records
+
+	#Used by:
+	# create a single asset
+	#todo: test that it can create more than one!
+	def create_asset(self, payload):
+		url = f"{self.base_url}/hardware"
+		response = requests.post(url, headers=self.headers, json=payload)
+
+		#for debugging:
+		response.raise_for_status()
+		return response.json()
+
+
 
