@@ -8,15 +8,18 @@ dev:
   domain: "http://10.8.0.197:8000/api/v1"
   cred_file: "dev.cred"
 
-  #model trying to create
-  target_model_name: "Test Model-API"
-  
-  # fallback IDs required to create a "rough model"
-  # as default here....
-  #TODO: update to take category and manufacture names
-  default_category_id: 1
-  default_manufacturer_id: 1
+  #model to find or create:
+  target_model_name: "SER5"
 
+  # fallback IDs required to create a "rough model"
+  default_category_id: 3 #3 = laptop
+  default_manufacturer_id: 1 #1 = apple
+
+  asset_count: 3 #number of assets with this model
+
+  #TODO: update to take category and manufacture names
+# Better TODO: setup file call to all specs, populate based on
+# Manufacturer/model from spec call...
 
 # prod:
 #   domain: "https://snipeit.camio.acep.uaf.edu//api/v1"

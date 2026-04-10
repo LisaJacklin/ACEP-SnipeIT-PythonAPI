@@ -13,7 +13,7 @@ from automate.model_manager import ModelManager
 
 def main():
     #start with loading in the config:
-    with open('dev-config.yaml', 'r') as file:
+    with open('sample-config.yaml', 'r') as file:
        full_config = yaml.safe_load(file)
 
     current_env = full_config['active_env']
@@ -47,9 +47,8 @@ def main():
         print("Cannot proceed without a valid Model ID")
         return
     
-    #setup the asset parameters needed
-    status_id = 2
-    count = 3
+    status_id = 1 #need to remove from
+    count = config.get('asset_count', 1)
 
     print(f"attempting to create {count} assets...")
     print(f"model attempting to be added: {model_id}")
