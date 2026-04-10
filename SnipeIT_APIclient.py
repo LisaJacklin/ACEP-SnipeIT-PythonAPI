@@ -42,7 +42,7 @@ class SnipeITClient:
 			offset+= limit
 		return all_records
 
-	#Used by:
+	#Used by: asset-automate.py
 	# create a single asset
 	#todo: test that it can create more than one!
 	def create_asset(self, payload):
@@ -52,6 +52,15 @@ class SnipeITClient:
 		#for debugging:
 		response.raise_for_status()
 		return response.json()
+
+	# Used by: 
+	# create a new model
+	def create_model(self, payload):
+		url = f"{self.base_url}/models"
+		response = requests.post(url, headers=self.headers, json=payload)
+		response.raise_for_status()
+		return response.json()
+
 
 
 

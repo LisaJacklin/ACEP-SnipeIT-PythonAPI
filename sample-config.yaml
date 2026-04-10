@@ -1,0 +1,32 @@
+# sample-config.yaml
+# EDIT ME!
+
+# options: dev or prod
+active_env: "dev"
+
+dev:
+  domain: "http://10.8.0.197:8000/api/v1"
+  cred_file: "dev.cred"
+
+  #model trying to create
+  target_model_name: "Test Model-API"
+  
+  # fallback IDs required to create a "rough model"
+  # as default here....
+  #TODO: update to take category and manufacture names
+  default_category_id: 1
+  default_manufacturer_id: 1
+
+
+# prod:
+#   domain: "https://snipeit.camio.acep.uaf.edu//api/v1"
+#   cred_file: "prod.cred"
+
+#   #model trying to create
+#   target_model_name: ""
+  
+#   # fallback IDs required to create a "rough model"
+#   # as default here....
+#   #TODO: update to take category and manufacture names
+#   default_category_id: 1
+#   default_manufacturer_id: 1
