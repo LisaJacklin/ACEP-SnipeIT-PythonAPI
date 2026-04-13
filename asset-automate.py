@@ -10,6 +10,7 @@ import yaml
 from SnipeIT_APIclient import SnipeITClient
 from automate.asset_manager import AssetManager
 from automate.model_manager import ModelManager
+from automate.reference_manager import ReferenceManager
 
 def main():
     #start with loading in the config:
@@ -23,24 +24,42 @@ def main():
 
     with open(cred_file_path, 'r') as cred_file:
         api_token = cred_file.read().strip()
+ 
+    ref_manager = ReferenceManager(
+        script_path=config['reference_script'],
+        json_path=config['reference_json']
+    )
 
+    ref_manager.refresh_data()
+    ref_manager.load_data()
+
+    # now load in the references based off the load data
+    status_id=ref_manager.get_id('statuslabels', config['target_status_name'])
+    model_id=ref_manager.get_id('models', config['target_model_name'])
+    category_id=ref_manager.get_id('categories', config['default_category_name'])
+    mfg_id=ref_manager.get_id('manufacturer', config['default_manufacturer_name'])
+
+    if not status_id:
+        print(f"ERROR: Could not find a Status ID for {config['target_status_name']}")
+        return
+    
     # and get the API requirements filled
     client = SnipeITClient(
         base_url=config['domain'],
         api_key = api_token
     )
 
+    #adding in the asset and model managers to do their thing!
     asset_manager = AssetManager(client)
-    #include model manager to add in if doesn't exist
-    model_manager = ModelManager(
-        api_client=client, 
-        default_category_id=config['default_category_id'],
-        default_manufacturer_id=config['default_manufacturer_id']
-    )
-
+    model_manager = ModelManager(client)
+    
     #additional model items
     target_name = config['target_model_name']
-    model_id = model_manager.pull_create_model_id(target_name)
+    model_id = model_manager.pull_create_model_id(
+        target_name,
+        category_id,
+        mfg_id
+        )
 
     # add in model safe exit mode
     if not model_id:

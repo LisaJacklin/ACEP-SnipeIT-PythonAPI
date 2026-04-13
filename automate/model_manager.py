@@ -5,29 +5,27 @@
 #
 
 class ModelManager:
-    def __init__(self, api_client, default_category_id, default_manufacturer_id):
+    def __init__(self, api_client):
         self.client = api_client
-        self.default_category_id = default_category_id
-        self.default_manufacturer_id=default_manufacturer_id
 
     # search for model, and creates if it doesn't exist
-    def pull_create_model_id(self, model_name):
-        print(f"Searching for model: '{model_name}...")
-        existing_models = self.client.get_all("models")
+    def pull_create_model_id(self, model_name, category_id, manufacturer_id):
+        # print(f"Searching for model: '{model_name}...")
+        # existing_models = self.client.get_all("models")
 
-        for model in existing_models:
-            if model.get('name', '').strip().lower() ==model_name.strip().lower():
-                model_id = model.get('id')
-                print(f" Found existing model! ID: {model_id}")
-                return model_id
+        # for model in existing_models:
+        #     if model.get('name', '').strip().lower() ==model_name.strip().lower():
+        #         model_id = model.get('id')
+        #         print(f" Found existing model! ID: {model_id}")
+        #         return model_id
         
-        #and if the model isn't found: 
-        print(f" Model '{model_name}' not found. Creating new model...")
+        # #and if the model isn't found: 
+        print(f"Creating new model...")
 
         payload = {
             "name": model_name, 
-            "category_id": self.default_category_id,
-            "manufacturer_id": self.default_manufacturer_id,
+            "category_id": category_id,
+            "manufacturer_id": manufacturer_id,
             "notes": "UPDATE INFO!"
         }
 
@@ -44,5 +42,5 @@ class ModelManager:
                 raise Exception(f"API rejected model creation: {result.get('messages')}")
 
         except Exception as e:
-            print(f"Failed to create rough model: {e}")
+            print(f"Failed to create model: {e}")
             return None

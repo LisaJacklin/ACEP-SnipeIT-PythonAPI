@@ -8,12 +8,17 @@ dev:
   domain: "http://10.8.0.197:8000/api/v1"
   cred_file: "dev.cred"
 
+  # pull in reference info from SnipeIT
+  reference_script: "pull-ids.py"
+  reference_json: "snipeit_reference_ids.json"
+  
   #model to find or create:
-  target_model_name: "SER5"
+  target_model_name: "testing-model-0"
+  target_status_name: "Deployed" #status tag for the asset
 
-  # fallback IDs required to create a "rough model"
-  default_category_id: 3 #3 = laptop
-  default_manufacturer_id: 1 #1 = apple
+  #test points if model isn't known: 
+  default_category_name: "Laptop" 
+  default_manufacturer_name: "Lenovo"
 
   asset_count: 3 #number of assets with this model
 
@@ -25,11 +30,5 @@ dev:
 #   domain: "https://snipeit.camio.acep.uaf.edu//api/v1"
 #   cred_file: "prod.cred"
 
-#   #model trying to create
 #   target_model_name: ""
   
-#   # fallback IDs required to create a "rough model"
-#   # as default here....
-#   #TODO: update to take category and manufacture names
-#   default_category_id: 1
-#   default_manufacturer_id: 1
