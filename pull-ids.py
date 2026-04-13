@@ -8,53 +8,82 @@
 import requests
 import json
 import os
+import yaml
 from pathlib import Path
 
-## Standard Configuration ---
-URL = "https://snipeit.camio.acep.uaf.edu"
-snipeit_api_token = Path('prod.cred').read_text().strip()
-
-header = {
-  "Authorization": f"Bearer {snipeit_api_token}",
-  "Accept": "application/json",
-  "Content-Type": "application/json"
-}
-## End Standard Configuration ---
 output_file = "snipeit_reference_ids.json"
 
 #get end point references
-def get_reference_list(endpoint):
-    try:
-        response = requests.get(f"{URL}/api/v1/{endpoint}", headers=header, params={"limit":500})
+def get_reference_list(endpoint, api_url, header):
+    print(f"Pulling {endpoint}...")
+    clean_list = []
+    limit = 500
+    offset = 0
 
-        if response.status_code == 200:
-            data = response.json()
-            clean_list = []
-            # Extract only 'id' and 'name' from each item
-            for item in data.get('rows', []):
-                clean_list.append({
-                    "id": item["id"],
-                    "name": item["name"]
-                })
-            return clean_list
-        else:
-            print(f"Failed to retrieve {endpoint}. Status code: {response.status_code}")
-            return []
+    try:
+        while True: 
+            response = requests.get(f"{api_url}/{endpoint}", headers=header, params={"limit": limit, "offset": offset})
+
+            if response.status_code == 200:
+                data = response.json()
+                rows = data.get('rows', [])
+
+                #now to gather info for items: 
+                for item in rows: 
+                    clean_list.append({
+                        "id": item.get("id"), 
+                        "name": item.get("name", "Unknown Name")
+                    })
+
+                if len(rows) < limit:
+                    break
+                offset += limit
+            else:
+                print(f" Failed to retried {endpoint}. Status: {response.status_code}")
+                break
+        return clean_list
 
     except Exception as e:
-            print(f"An error occurred: {e}")
-            return []
+        print(f"An error occured: {e}")
+        return []
 
 # simplify main
 def main():
+    #load in the config file
+    try: 
+        with open('sample-config.yaml', 'r') as file:
+            full_config = yaml.safe_load(file)
+        
+        config = full_config[full_config['active_env']]
+        api_url = config['domain']
+
+        api_token = Path(config['cred_file']).read_text().strip()
+
+        #api header setup
+        header = {
+            "Authorization": f"Bearer {api_token}",
+            "Accept": "application/json", 
+            "Content-Type": "application/json"
+        }
+
+    except FileNotFoundError as e: 
+        print(f"Could not find config or cred file: {e}")
+        return
+    
     data_to_store = {
-        #add/remove components as determined they are needed
-        "manufacturers": get_reference_list("manufacturers"),
-        "categories": get_reference_list("categories"),
-        "models": get_reference_list("models"),
-        "statuslabels": get_reference_list("statuslabels"),
-        "fieldsets": get_reference_list("fieldsets"),
-        "fields": get_reference_list("fields")
+        "manufacturers": get_reference_list("manufacturers", api_url, header),
+        "categories": get_reference_list("categories", api_url, header),
+        "models": get_reference_list("models", api_url, header),
+        "statuslabels": get_reference_list("statuslabels", api_url, header),
+        "fieldsets": get_reference_list("fieldsets", api_url, header),
+        "fields": get_reference_list("fields", api_url, header),
+        
+        #additional items for later maybe...
+        "locations": get_reference_list("locations", api_url, header),
+        "companies": get_reference_list("companies", api_url, header),
+        "departments": get_reference_list("departments", api_url, header),
+        "suppliers": get_reference_list("suppliers", api_url, header),
+        "depreciations": get_reference_list("depreciations", api_url, header)
     }
 
     #store output to json file
@@ -68,5 +97,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-   # note: what is protected and something I don't want ie: should I ignore this information and push it to .gitignore?
