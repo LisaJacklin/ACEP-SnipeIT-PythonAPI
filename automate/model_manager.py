@@ -9,7 +9,7 @@ class ModelManager:
         self.client = api_client
 
     # search for model, and creates if it doesn't exist
-    def pull_create_model_id(self, model_name, category_id, manufacturer_id):
+    def pull_create_model_id(self, model_name, category_id, manufacturer_id,fieldset_id):
         # print(f"Searching for model: '{model_name}...")
         # existing_models = self.client.get_all("models")
 
@@ -26,6 +26,7 @@ class ModelManager:
             "name": model_name, 
             "category_id": category_id,
             "manufacturer_id": manufacturer_id,
+            "fieldset_id": fieldset_id,
             "notes": "UPDATE INFO!"
         }
 

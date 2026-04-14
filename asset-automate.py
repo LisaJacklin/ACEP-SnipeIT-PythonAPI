@@ -38,7 +38,7 @@ def main():
     model_id=ref_manager.get_id('models', config['target_model_name'])
     category_id=ref_manager.get_id('categories', config['default_category_name'])
     mfg_id=ref_manager.get_id('manufacturer', config['default_manufacturer_name'])
-
+    fieldset_id=ref_manager.get_id('fieldsets', config['default_fieldset_name'])
     if not status_id:
         print(f"ERROR: Could not find a Status ID for {config['target_status_name']}")
         return
@@ -58,7 +58,8 @@ def main():
     model_id = model_manager.pull_create_model_id(
         target_name,
         category_id,
-        mfg_id
+        mfg_id,
+        fieldset_id
         )
 
     # add in model safe exit mode

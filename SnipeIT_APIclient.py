@@ -2,7 +2,7 @@
 #Created: 2026-03-17
 #Last edit: 2026-04-07
 #
-# Description:
+# Description: this script manages the api handshakes required for the data!
 #
 
 import requests
@@ -53,7 +53,7 @@ class SnipeITClient:
 		response.raise_for_status()
 		return response.json()
 
-	# Used by: 
+	# Used by: model_manager.py
 	# create a new model
 	def create_model(self, payload):
 		url = f"{self.base_url}/models"
@@ -61,6 +61,11 @@ class SnipeITClient:
 		response.raise_for_status()
 		return response.json()
 
-
-
+	# Used by:
+	# updates an existing asset (generally with partial payloads)
+	def patch_asset(self, asset_id, payload):
+		url = f"{self.base_url}/ {asset_id}"
+		response = requests.patch(url, headers=self.headers, json=payload)
+		response.raise_for_status()
+		return response.json()
 
