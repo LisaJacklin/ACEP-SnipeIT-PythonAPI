@@ -32,7 +32,8 @@ def get_reference_list(endpoint, api_url, header):
                 for item in rows: 
                     clean_list.append({
                         "id": item.get("id"), 
-                        "name": item.get("name", "Unknown Name")
+                        "name": item.get("name", "Unknown Name"),
+                        "db_column": item.get("db_column")
                     })
 
                 if len(rows) < limit:
