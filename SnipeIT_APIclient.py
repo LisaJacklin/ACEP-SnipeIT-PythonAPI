@@ -64,7 +64,7 @@ class SnipeITClient:
 	# Used by:
 	# updates an existing asset (generally with partial payloads)
 	def patch_asset(self, asset_id, payload):
-		url = f"{self.base_url}/ {asset_id}"
+		url = f"{self.base_url}/hardware/{asset_id}"
 		response = requests.patch(url, headers=self.headers, json=payload)
 		response.raise_for_status()
 		return response.json()
