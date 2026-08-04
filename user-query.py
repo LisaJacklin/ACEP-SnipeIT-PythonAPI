@@ -5,6 +5,8 @@
 # Description: 
 
 from pathlib import Path
+from datetime import datetime, timezone
+import json
 import requests
 
 ## Standard Configuration ---
@@ -17,6 +19,8 @@ header = {
     "Content-Type": "application/json"
 }
 ## End Standard Configuration ---
+output_json = "snipeit_user_groups.json"
+
 
 #need to gather the group names
 def get_group_lookup_table() -> dict[int, str]:
@@ -83,6 +87,20 @@ def get_users_groups():
             })
 
         offset += limits
+    #setup json export
+    export_payload =  {
+        "metadata":{
+            "source": "Snipe-IT API v1",
+            "total_users": len(all_users_data),
+            "exported_at": datetime.now(timezone.utc).isoformat()
+        },
+        "users": all_users_data
+    }
+    # Save to JSON file
+    with open(output_json, "w", encoding="utf-8") as f:
+        json.dump(export_payload, f, indent=4)
+
+    print(f"[SUCCESS] Exported {len(all_users_data)} users to '{output_json}'")
 
     return all_users_data
 
