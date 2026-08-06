@@ -5,3 +5,4 @@ snipeitkey
 /__pycache__/*
 *.pyc
 reports/*
+sample-config.yaml

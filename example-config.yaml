@@ -1,0 +1,26 @@
+# sample-config.yaml
+# EDIT ME!
+
+# options: dev or prod
+active_env: "dev"
+
+dev:
+  domain: "https://"
+  cred_file: "FILENAME.cred"
+
+  # pull in reference info from SnipeIT
+  reference_script: "pull-ids.py"
+  reference_json: "snipeit_reference_ids.json"
+  
+  #model to find or create:
+  target_model_name: "testing-model-0"
+  target_status_name: "Deployed" #status tag for the asset
+
+  #test points if model isn't known: 
+  default_category_name: "Laptop" 
+  default_manufacturer_name: "Lenovo"
+
+  asset_count: 3 #number of assets with this model
+
+# prod:
+  
