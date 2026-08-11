@@ -10,10 +10,11 @@ from pathlib import Path
 from datetime import datetime
 
 #module scripts for api and assets
-from reporting import asset
+from reporting import asset, formatter, visuals
 from reporting.api_client import SnipeITClient
-from reporting import formatter
-from reporting import visuals
+
+#import pandas to tackle activities
+import pandas as pd
 
 # Configuration for API
 api_key = Path('prod.cred').read_text().strip()
@@ -30,12 +31,19 @@ def main():
 	setup_directories()
 	client = SnipeITClient(base_url, api_key)
 
+	# 0: Need to get all data from the api and other tools
 	print("Fetching hardware from Snipe-IT...")
-			# Asset == hardware in snipeit api land
+	# Asset == hardware in snipeit api land
 	assets = client.get_all("hardware")
 	#print(f"Successfully retrieved {len(assets)} assets.\n")
 
-	# Run Metric 1: Asset Count by Status
+	print("Gathering activity reports...")
+	raw_json = os.path.join(
+		report_dir, f"raw_activity_report_2026_07_07.json"
+	)
+	formatter.save_json_file(assets, raw_json)
+
+	# 1: Asset Count by Status
 	print("--- Asset Counts by Status Label ---")
 	status_counts = asset.get_status_counts(assets)
 	for status, count in sorted(status_counts.items()):
@@ -45,10 +53,27 @@ def main():
 	print(f"\nTotal Assets: {total_assets}")
 
 	print("\n--- 'Ready to Deploy' Assets by Location ---")
-			# Run Metric 2: Ready to Deploy by Location
+			
+			
+	#2: Ready to Deploy by Location
 	location_counts = asset.get_ready_location(assets)
 	for location, count in sorted(location_counts.items()):
 					print(f"{location}: {count}")
+
+	#3: Activity Log Processes
+	## TODO: update dates somewhere for reporting....create a config?
+	print("--- Processing Activity Logs ---")
+	start_date = "2026-04-01"
+	end_date = "2026-07-01"
+
+	timeline_data = formatter.process_activity_timeline(
+		raw_json_path=raw_json,
+		start_date_str=start_date,
+		end_date_str=end_date
+	)
+# Convert dictionary to DataFrame for visuals mapping
+	plot_df = pd.DataFrame.from_dict(timeline_data, orient="index")
+	plot_df.index = pd.to_datetime(plot_df.index)
 
 	print("\n--- Generating Report ---")
 	# Generate Markdown report
@@ -71,6 +96,17 @@ def main():
 	#	![Asset Counts by Status]({status_pie_chart})
 	#	![Ready to Deploy Assets by Location]({location_pie_chart})
 	#"""
+	# Generate Activity Line Graph
+	trend_line_graph = os.path.join(
+        report_dir, f"activity_trends_{date_str}.png"
+    )
+
+	visuals.create_activity_line_graph(
+        plot_data=plot_df,
+        title=f"Asset Allocation Trends ({start_date} to {end_date})",
+        filepath=trend_line_graph,
+    )
+
 
 # 4. Put all your text blocks into a clean list
 	report_sections = (

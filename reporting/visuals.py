@@ -58,3 +58,39 @@ def create_nested_pie_chart(data_dict, title, filepath):
 ## Changes to make for reading the pie chart:
 # values not percentagse
 # side key or include inside chart
+
+# New Line Graph function for Activity Tracking
+def create_activity_line_graph(plot_data, title, filepath):
+    """Expects a Pandas DataFrame indexed by Date, with columns matching the action trends to plot."""
+    plt.figure(figsize=(12, 6))
+
+    # Dynamically plot whatever trend columns are passed in the DataFrame
+    colors = ["#007bff", "#28a745", "#dc3545", "#ffc107"]
+    markers = ["o", "s", "^", "D"]
+
+    for i, column in enumerate(plot_data.columns):
+        plt.plot(
+            plot_data.index,
+            plot_data[column],
+            label=column,
+            color=colors[i % len(colors)],
+            linewidth=2,
+            marker=markers[i % len(markers)],
+        )
+
+    plt.title(title, fontsize=14, fontweight="bold", pad=15)
+    plt.xlabel("Date", fontsize=12)
+    plt.ylabel("Number of Actions", fontsize=12)
+    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.legend(fontsize=11)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    plt.savefig(filepath, dpi=300, bbox_inches="tight")
+    plt.close()
+    print(f"Line graph saved to: {filepath}")
+
+
+## Changes to make for reading the pie chart:
+# values not percentagse
+# side key or include inside chart
